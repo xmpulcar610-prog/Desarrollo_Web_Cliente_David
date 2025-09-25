@@ -1,10 +1,10 @@
 let numero = parseInt(prompt("Introduce un número:"));
+let esPrimo = true;
 
-if (numero <= 1) {
-    console.log("No es primo");
+if (numero < 1) {
+    document.getElementById("salida").innerHTML ="El numero " +numero+ " no es primo";
 } else {
-    let esPrimo = true;
-    for (let i = 2; i <= Math.sqrt(numero); i++) {
+    for (let i = 2; i <= numero-1; i++) {
         if (numero % i === 0) {
             esPrimo = false;
             break;
@@ -12,8 +12,8 @@ if (numero <= 1) {
     }
 
     if (esPrimo) {
-        console.log("Es primo");
+        document.getElementById("salida").innerHTML ="El numero " +numero+ " es primo";
     } else {
-        console.log("No es primo");
+        document.getElementById("salida").innerHTML ="El numero " +numero+ " no es primo";
     }
 }
