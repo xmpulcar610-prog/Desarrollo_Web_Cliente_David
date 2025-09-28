@@ -1,23 +1,11 @@
-function esPrimo (num)
-{
-    if (num < 2) 
-        return false;
-    for (let i = 2; i <= Math.sqrt(num); i++)
-    {
-        if (num % i === 0) 
-            return false; 
-    }
-    return true;
-}
-let contador = 0;
-let numero = 2;
+let strSalida = "";
+let num = 2;
 
-while (contador < 100)
+for (let i = 0; i < 100; i++)
 {
-    if (esPrimo(numero))
+    while (!comprobar(num))
     {
-        console.log(numero);
-        contador++;
+        num++;
     }
-    numero++;
+    if ()
 }
