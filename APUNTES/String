@@ -1,0 +1,27 @@
+at() --> Devuelve el carácter en una posición (índice) específica.
+    Ejm: 
+        texto = Hola Mundo
+        texto.at(0) = H 
+
+concat() --> Une dos o más cadenas y devuelve una nueva.
+    Ejm:
+        texto1 = Miguel
+        texto2 = Pulido
+        texto1.concat(" ", texto2) = Miguel Pulido
+
+includes() --> Devuelve true si la cadena contiene el valor especificado.
+    Ejm:
+        texto = Hola Mundo este es mi primer programa
+        texto.includes(primer) = true
+
+length() --> Devuelve la longitud (número de caracteres) de la cadena.
+    Ejm:
+        texto = Hola Mundo
+        texto.length() = 10
+
+replace() --> Sustituye la primera coincidencia de un patrón por otro valor.
+replaceAll() --> Sustituye TODAS las coincidencia de un patrón por otro valor.
+    Ejm:
+        texto = Hola Mundo, soy Miguel
+        texto.replace("Miguel", "Pepe") = Hola Mundo, soy Pepe
+
