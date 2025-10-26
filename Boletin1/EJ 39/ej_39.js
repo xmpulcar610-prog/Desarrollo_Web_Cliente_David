@@ -1,11 +1,25 @@
-let strSalida = "";
-let num = 2;
+let contador = 0;
+let numero = 2;
 
-for (let i = 0; i < 100; i++)
-{
-    while (!comprobar(num))
+
+while (contador < 100) 
     {
-        num++;
-    }
-    if ()
+        let esPrimo = true;
+
+        for (let i = 2; i <= Math.sqrt(numero); i++) 
+            {
+                if (numero % i === 0) 
+                    {
+                        esPrimo = false;
+                        break;
+                    }
+            }
+
+        if (esPrimo) 
+            {
+                document.getElementById("salida").innerHTML += numero + " - ";
+                contador++;
+            }
+  numero++;
 }
+
