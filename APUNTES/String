@@ -19,9 +19,25 @@ length() --> Devuelve la longitud (número de caracteres) de la cadena.
         texto = Hola Mundo
         texto.length() = 10
 
-replace() --> Sustituye la primera coincidencia de un patrón por otro valor.
-replaceAll() --> Sustituye TODAS las coincidencia de un patrón por otro valor.
+replace() / replaceAll() --> Sustituye la primera coincidencia de un patrón por otro valor.
     Ejm:
         texto = Hola Mundo, soy Miguel
         texto.replace("Miguel", "Pepe") = Hola Mundo, soy Pepe
 
+slice() --> Extrae una parte de la cadena y devuelve una nueva.
+    Ejm: 
+        texto = Hola Mundo
+        texto.slice(0,4) = Hola
+
+toLowerCase() / toUpperCase() --> Convierte la cadena a minúsculas / mayúsculas.
+    Ejm:
+        texto = Hola Mundo
+        texto.toLowerCase() = hola mundo
+        texto.toUpperCase() = HOLA MUNDO
+
+trim() / trimStart() / trimEnd() --> Elimina los espacios en blanco al principio y al final de la cadena.
+    Ejm:
+        texto =     Hola Mundo      ;
+        texto.trim() = Hola Mundo;
+        texto.trimEnd() =      Hola Mundo;
+        texto.trimStart() = Hola Mundo      
