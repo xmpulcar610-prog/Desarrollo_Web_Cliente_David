@@ -23,6 +23,9 @@ replace() / replaceAll() --> Sustituye la primera coincidencia de un patrón por
     Ejm:
         texto = Hola Mundo, soy Miguel
         texto.replace("Miguel", "Pepe") = Hola Mundo, soy Pepe
+    Ejm:
+        texto = MiguelPulido
+        texto.replace(/([a-z])([A-Z])/g, "$1 $2")   = Miguel Pulido
 
 slice() --> Extrae una parte de la cadena y devuelve una nueva.
     Ejm: 
@@ -51,3 +54,4 @@ split() --> Divide la cadena en un array de subcadenas.
     Ejm: 
         texto = Hola Mundo soy Miguel
         texto.split(" ") = Hola,Mundo,soy,Miguel --> 4 subcadenas
+
