@@ -63,7 +63,27 @@ setDate() --> Cambia el día del mes.
     fecha = new Date("2025-10-27")
     fecha.setDate(2) = 2025-10-2
 
-setDate() --> Cambia el mes.
+setMonth() --> Cambia el mes.
     Ejm:
     fecha = new Date("2025-10-27")
-    fecha.setDate(3) = 2025-3-27
+    fecha.setMonth(3) = 2025-3-27
+
+setFullYear() --> Cambia el año.
+    Ejm:
+    fecha = new Date("2025-10-27")
+    fecha.setFullYear(2000) = 2000-10-27
+
+setHours() --> Cambia la hora.
+    Ejm:
+    fecha = new Date("2025-10-27")
+    fecha.setHours(14) = 14:00:00
+
+setMinutes() --> Cambia los minutos.
+    Ejm:
+    fecha = new Date("2025-10-27")
+    fecha.setMinutes(32) = 00:32:00
+
+setSeconds() --> Cambia los segundos.
+    Ejm:
+    fecha = new Date("2025-10-27")
+    fecha.setSeconds(51) = 00:00:51
