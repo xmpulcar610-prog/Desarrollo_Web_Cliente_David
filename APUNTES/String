@@ -14,10 +14,10 @@ includes() --> Devuelve true si la cadena contiene el valor especificado.
         texto = Hola Mundo este es mi primer programa
         texto.includes(primer) = true
 
-length() --> Devuelve la longitud (número de caracteres) de la cadena.
+length --> Devuelve la longitud (número de caracteres) de la cadena.
     Ejm:
         texto = Hola Mundo
-        texto.length() = 10
+        texto.length = 10
 
 replace() / replaceAll() --> Sustituye la primera coincidencia de un patrón por otro valor.
     Ejm:
@@ -40,4 +40,14 @@ trim() / trimStart() / trimEnd() --> Elimina los espacios en blanco al principio
         texto =     Hola Mundo      ;
         texto.trim() = Hola Mundo;
         texto.trimEnd() =      Hola Mundo;
-        texto.trimStart() = Hola Mundo      
+        texto.trimStart() = Hola Mundo
+
+test() --> Comprueba si una cadena (string) cumple con una expresión regular. 
+    Ejm: 
+        texto = Hola
+        test = /[A-Z]/.test(texto)  = H
+
+split() --> Divide la cadena en un array de subcadenas.
+    Ejm: 
+        texto = Hola Mundo soy Miguel
+        texto.split(" ") = Hola,Mundo,soy,Miguel --> 4 subcadenas
