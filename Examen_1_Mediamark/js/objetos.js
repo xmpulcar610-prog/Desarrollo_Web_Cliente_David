@@ -17,7 +17,9 @@ class Producto {
   set precio(v) { this.#precio = v; }
 
   toHTMLRow() {
-    return `<tr><td>${this.codigo}</td><td>${this.nombre}</td><td>${this.precio.toFixed(2)} €</td>`;
+    return `<tr><td>${this.codigo}</td>
+                <td>${this.nombre}</td>
+                <td>${this.precio.toFixed(2)} €</td>`;
   }
 }
 

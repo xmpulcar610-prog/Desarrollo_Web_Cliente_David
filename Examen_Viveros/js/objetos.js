@@ -29,22 +29,12 @@ class Arbol {
     this.#especie = especie;
   }
 
-  toHTMLRow() {
+  toHTMLRow() 
+  {
     let fila = "<tr>";
-    /*fila += "<td>" + this.codigo + "</td>";
+    fila += "<td>" + this.codigo + "</td>";
     fila += "<td>" + this.tallaje + "</td>";
-    fila += "<td>" + this.especie + "</td></tr>";*/
-    let atributos = Object.values(this);
-    let entradas = Object.entries(this);
-    console.log(this);
-    console.log(atributos);
-    console.log(entradas);
-
-    for (let atributo in atributos) {
-      console.log(atributo);
-      fila += "<td>" + atributo + "</td>";
-    }
-    return fila + "</tr>";
+    fila += "<td>" + this.especie + "</td></tr>";
   }
 }
 
