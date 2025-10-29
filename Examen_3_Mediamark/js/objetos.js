@@ -31,9 +31,11 @@ class Articulo{
 class Electrodomestico extends Articulo{
   #claseEnergetica; 
   #garantiaMeses;
-  constructor(codigo, nombre, marca, precio, stock, claseEnergetica, garantiaMeses){
+  constructor(codigo, nombre, marca, precio, stock, claseEnergetica, garantiaMeses)
+  {
     super(codigo, nombre, marca, precio, stock);
-    this.#claseEnergetica=claseEnergetica; this.#garantiaMeses=garantiaMeses;
+    this.#claseEnergetica=claseEnergetica; 
+    this.#garantiaMeses=garantiaMeses;
   }
   get claseEnergetica(){return this.#claseEnergetica;}
   get garantiaMeses(){return this.#garantiaMeses;}
@@ -45,10 +47,12 @@ class Electrodomestico extends Articulo{
 }
 
 class Gadget extends Articulo{
-  #compatibilidad; #bateriaMah;
+  #compatibilidad; 
+  #bateriaMah;
   constructor(codigo, nombre, marca, precio, stock, compatibilidad, bateriaMah){
     super(codigo, nombre, marca, precio, stock);
-    this.#compatibilidad=compatibilidad; this.#bateriaMah=bateriaMah;
+    this.#compatibilidad=compatibilidad; 
+    this.#bateriaMah=bateriaMah;
   }
   get compatibilidad(){return this.#compatibilidad;}
   get bateriaMah(){return this.#bateriaMah;}
@@ -60,15 +64,37 @@ class Gadget extends Articulo{
 }
 
 class Cliente{
-  #dni; #nombre; #telefono;
-  constructor(dni, nombre, telefono){ this.#dni=dni; this.#nombre=nombre; this.#telefono=telefono; }
-  get dni(){return this.#dni;} get nombre(){return this.#nombre;} get telefono(){return this.#telefono;}
+  #dni; 
+  #nombre; 
+  #telefono;
+  constructor(dni, nombre, telefono)
+  { 
+    this.#dni=dni; 
+    this.#nombre=nombre; 
+    this.#telefono=telefono; 
+  }
+  get dni(){return this.#dni;} 
+  get nombre(){return this.#nombre;} 
+  get telefono(){return this.#telefono;}
 }
 
 class Tienda{
-  #articulos; #clientes; #pedidos; #sigArt; #sigPed;
-  constructor(){ this.#articulos=[]; this.#clientes=[]; this.#pedidos=[]; this.#sigArt=1; this.#sigPed=1; }
-  get articulos(){return this.#articulos;} get clientes(){return this.#clientes;} get pedidos(){return this.#pedidos;}
+  #articulos; 
+  #clientes; 
+  #pedidos; 
+  #sigArt; 
+  #sigPed;
+  constructor()
+  { 
+    this.#articulos=[]; 
+    this.#clientes=[]; 
+    this.#pedidos=[]; 
+    this.#sigArt=1; 
+    this.#sigPed=1; 
+  }
+  get articulos(){return this.#articulos;} 
+  get clientes(){return this.#clientes;} 
+  get pedidos(){return this.#pedidos;}
 
   altaCliente(c){
     if(this.clientes.some(x=>x.dni===c.dni)) return false; this.clientes.push(c); return true;
