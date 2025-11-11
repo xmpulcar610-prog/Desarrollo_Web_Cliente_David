@@ -227,7 +227,7 @@ class AgenciaViajes {
     if (!(cliente instanceof Cliente)) return "Objeto Cliente inválido.";
     if (this.#clientes.some(c => c.dniCliente === cliente.dniCliente)) return "Ya existe un cliente con ese DNI.";
     this.#clientes.push(cliente);
-    return "Cliente dado de alta.";
+    return "Cliente dado de alta.";   
   }
 
   altaAlojamiento(alojamiento) {

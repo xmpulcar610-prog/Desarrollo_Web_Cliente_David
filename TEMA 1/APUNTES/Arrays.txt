@@ -98,4 +98,3 @@ reverse() --> Invierte el orden del array.
     Ejm: 
         num = [1,2,3]
         num.reverse() = 3,2,1
-

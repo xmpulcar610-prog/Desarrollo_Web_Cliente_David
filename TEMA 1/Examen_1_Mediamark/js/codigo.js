@@ -70,13 +70,13 @@ function aceptarAltaProducto() {
     oProd = new Smartphone(codigo, sNombre, fPrecio, almacen, cincoG);
   }
 
-  if (tienda.altaProducto(oProd)) {
-    alert("Producto registrado OK");
-    frmAltaProducto.reset();
-    frmAltaProducto.style.display = "none";
-  } else {
-    alert("Producto registrado previamente");
-  }
+    if (tienda.altaProducto(oProd)) {
+      alert("Producto registrado OK");
+      frmAltaProducto.reset();
+      frmAltaProducto.style.display = "none";
+    } else {
+      alert("Producto registrado previamente");
+    }
 }
 
 // Actualizar precio
