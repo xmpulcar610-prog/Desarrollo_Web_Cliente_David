@@ -8,5 +8,5 @@ teclado.addEventListener('click', function(event)
         if (boton.tagName === "INPUT" && boton.type === "button")
             {
                 salida.value += boton.value
-            }
+            }   
     })
