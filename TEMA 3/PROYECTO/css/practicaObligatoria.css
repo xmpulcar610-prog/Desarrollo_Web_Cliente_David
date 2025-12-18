@@ -87,3 +87,22 @@ th {
   background-color: lightskyblue;
   margin-bottom: 5px;
 }
+
+.cliente.activo{
+  outline: 4px solid #ffcc00;
+  outline-offset: -4px;
+  transform: scale(1.03);
+}
+
+.cliente.pagado{
+  opacity: 0.95;
+}
+
+.cliente.pendiente{
+  font-weight: 700;
+}
+
+button.boton:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
