@@ -1,8 +1,7 @@
-const ToogleButton = texto => ({
-  tag: "button",
+const ToogleButton = (texto) => ({
   type: "button",
-  className: "toggle-btn",
-  textContent: texto,
-  attributes: { "aria-pressed": "false" },
-  onClick: () => "¡Click! (simulado)"
+  text: texto,
+  className: "btn-primary",
 });
+
+console.log(ToogleButton("Click aquí"))
