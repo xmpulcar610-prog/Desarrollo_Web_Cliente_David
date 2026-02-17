@@ -1,0 +1,109 @@
+6. Módulos en JavaScript: Import y Export
+Módulos en JavaScript: Import y Export
+
+En el desarrollo moderno de aplicaciones web, especialmente aquellas construidas con librerías basadas en componentes como React, la gestión eficiente del código es fundamental. Antes de la especificación ECMAScript 2015 (ES6), JavaScript carecía de un sistema de módulos nativo estándar, lo que obligaba a los desarrolladores a depender de variables globales o librerías externas. Con la llegada de los Módulos ES (ES Modules), JavaScript obtuvo una sintaxis oficial para compartir código entre archivos.
+Nota Conceptual: Un módulo no es más que un archivo de JavaScript que se ejecuta en modo estricto ('use strict') de forma automática. Esto significa que las variables declaradas en él no contaminan el ámbito global (window), encapsulando la lógica y exponiendo solo aquello que decidamos explícitamente mediante la palabra clave export.
+1. Exportación de Funcionalidades (Export)
+
+Para que una variable, función o clase esté disponible para otros archivos, debemos exportarla. Existen dos tipos principales de exportación en ES6: Exportaciones Nombradas (Named Exports) y Exportaciones por Defecto (Default Exports). Comprender la diferencia es crucial para importar correctamente los elementos en React.
+1.1. Exportaciones Nombradas (Named Exports)
+
+Se utilizan cuando deseamos exportar múltiples valores desde un solo módulo. El nombre del elemento exportado es su identificador único; por tanto, al importarlo, debemos referirnos a él por ese nombre exacto.
+
+// Archivo: utilidades.js
+
+// Opción A: Exportar en la declaración (Inline)
+export const PI = 3.14159;
+
+export function calcularArea(radio) {
+    return PI * (radio * radio);
+}
+
+// Opción B: Exportar al final del archivo (Lista de exportación)
+const gravedad = 9.8;
+function obtenerGravedad() {
+    return gravedad;
+}
+
+export { gravedad, obtenerGravedad };
+
+1.2. Exportación por Defecto (Default Export)
+
+Cada módulo puede tener como máximo una exportación por defecto. Esta técnica se utiliza frecuentemente en React para exportar el componente principal de un archivo. Al importar un export default, no necesitamos usar llaves y podemos asignarle el nombre que queramos en el archivo de destino.
+
+// Archivo: UserProfile.js
+
+const usuario = {
+    nombre: "Ana García",
+    rol: "Desarrolladora"
+};
+
+function saludarUsuario() {
+    console.log(`Hola, ${usuario.nombre}`);
+}
+
+// Solo puede haber un default export por archivo
+export default saludarUsuario;
+
+2. Importación de Módulos (Import)
+
+La sentencia import se utiliza para traer funciones, objetos o primitivas que han sido exportadas desde un módulo externo. La sintaxis varía ligeramente dependiendo de si la exportación fue nombrada o por defecto.
+2.1. Importando Exportaciones Nombradas
+
+Debemos usar llaves { } (destructuring) y los nombres deben coincidir exactamente con los exportados. Si deseamos cambiar el nombre para evitar conflictos, utilizamos la palabra clave as.
+
+// Archivo: app.js
+// Importamos elementos específicos usando llaves
+import { PI, calcularArea } from './utilidades.js';
+
+// Uso de alias (as) para renombrar durante la importación
+import { gravedad as gTerrestre } from './utilidades.js';
+
+console.log(PI); // 3.14159
+console.log(gTerrestre); // 9.8
+
+2.2. Importando Exportaciones por Defecto
+
+Al importar un export default, no se usan llaves. Además, podemos asignar cualquier nombre a la variable de importación, ya que JavaScript asume que nos referimos al único elemento exportado por defecto.
+
+// Archivo: app.js
+// Importación por defecto (el nombre 'saludar' es arbitrario)
+import saludar from './UserProfile.js';
+
+saludar(); // Ejecuta la función saludarUsuario del otro archivo
+
+Importante para React: Es una convención muy extendida en React exportar los componentes como default (ej. export default Button) y las utilidades o constantes como exportaciones nombradas. Sin embargo, es posible mezclar ambas en un mismo archivo.
+2.3. Importación Mixta y de Espacio de Nombres (Namespace)
+
+Podemos importar el default y las named exports en una sola línea, o importar todo el contenido de un módulo encapsulándolo en un objeto.
+
+// Caso 1: Importación Mixta (Default + Nombradas)
+// React es el default export, useState y useEffect son nombrados
+import React, { useState, useEffect } from 'react';
+
+// Caso 2: Importar TODO como un objeto (Namespace import)
+import * as Matematicas from './utilidades.js';
+
+console.log(Matematicas.PI);
+console.log(Matematicas.calcularArea(5));
+
+3. Patrón de Barril (Barrel File) y Re-exportación
+
+En proyectos grandes de React, es común tener una carpeta con múltiples componentes. Para evitar rutas de importación largas y desordenadas en otros archivos, utilizamos un archivo índice (index.js) que re-exporta los contenidos.
+
+// Archivo: componentes/index.js
+
+// Re-exportamos componentes desde sus archivos originales
+export { default as Button } from './Button.js';
+export { default as Header } from './Header.js';
+
+// --- Uso en otro archivo ---
+// Antes: import Button from './componentes/Button.js';
+// Ahora (más limpio):
+import { Button, Header } from './componentes';
+
+Resumen Comparativo
+Característica 	Named Export 	Default Export
+Cantidad por archivo 	Ilimitada (varios exports) 	Solo uno (1)
+Sintaxis de Importación 	Con llaves: import { X } from ... 	Sin llaves: import X from ...
+Flexibilidad de nombre 	Estricta (debe coincidir o usar alias) 	Flexible (cualquier nombre válido)

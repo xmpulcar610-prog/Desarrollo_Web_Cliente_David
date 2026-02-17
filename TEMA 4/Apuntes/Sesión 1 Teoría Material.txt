@@ -1,0 +1,125 @@
+Sesión 1: Teoría
+📘 Material Docente: Sesión 1
+Introducción a React con TypeScript: Componentes y Props
+1. ¿Qué es React y cómo funciona?
+
+React no es un framework monolítico (como Angular), es una librería enfocada en construir interfaces de usuario. Su filosofía principal es romper la interfaz en piezas pequeñas, reutilizables y aisladas llamadas Componentes.
+El Árbol de Componentes
+
+Una aplicación React es, en esencia, un árbol de componentes:
+
+    Raíz: Tienes un componente principal (usualmente llamado App).
+    Ramas: App contiene otros componentes (ej: Header, ProductList, Footer).
+    Hojas: Los componentes más pequeños (ej: Button, Label).
+
+Analogía: Piensa en etiquetas HTML personalizadas. En lugar de escribir <div class="sidebar">...</div> repetidamente, crearás una etiqueta <Sidebar /> que encapsula esa lógica y estilo.
+2. JSX: JavaScript con sintaxis de HTML
+
+React utiliza una extensión de sintaxis llamada JSX (JavaScript XML). Aunque parece HTML, es JavaScript. Al compilarse, se transforma en llamadas a funciones de JS que crean el DOM.
+Reglas de Oro del JSX
+
+    Todo componente debe devolver un solo elemento padre: No puedes devolver dos div hermanos sin un envoltorio. Si no quieres añadir nudos extra al DOM, usa un Fragmento: <> ... </>.
+    Atributos camelCase: Ya no usamos class (palabra reservada en JS), usamos className. onclick se convierte en onClick.
+    Cierre de etiquetas: Todas las etiquetas deben cerrarse. <br> ahora es <br />.
+    Interpolación: Para insertar valores de JavaScript en el HTML, usamos llaves { }.
+
+Ejemplo:
+const nombre = "Juan";
+const elemento = <h1 className="titulo">Hola, {nombre}</h1>;
+3. Creación de Componentes Funcionales
+
+En React moderno, los componentes son simplemente funciones que devuelven JSX.
+// Definición del componente
+function Welcome() {
+  return <h2>Bienvenido a mi App</h2>;
+}
+
+// Uso del componente (instanciación)
+export default function App() {
+  return (
+    <div>
+       <Welcome />
+    </div>
+  );
+}
+4. Props: Comunicación Padre-Hijo con TypeScript
+
+Aquí es donde TypeScript brilla. Las Props (propiedades) son los datos que un componente padre pasa a un hijo. Son de solo lectura (inmutables) para el hijo.
+
+Sin TypeScript, no sabríamos qué props espera un componente hasta que miramos el código o falla. Con TypeScript, definimos un "contrato" o interfaz.
+Definiendo el contrato (Interface/Type)
+
+Usamos una interface o type para definir la forma de las props.
+// 1. Definimos qué datos espera recibir este componente
+type AlertProps = {
+  text: string; // Dato obligatorio
+  type: 'success' | 'error' | 'warning'; // Union type para limitar valores
+  showIcon?: boolean; // Prop opcional (marcada con ?)
+};
+
+// 2. Aplicamos el tipo al componente
+export const Alert = ({ text, type, showIcon = true }: AlertProps) => {
+  // Nota: 'showIcon = true' asigna un valor por defecto si no se pasa la prop
+  
+  return (
+    <div className={`alert alert-${type}`}>
+      {/* Renderizado condicional del icono */}
+      {showIcon && <span>🔔</span>}
+      <p>{text}</p>
+    </div>
+  );
+};
+Ventajas de TS aquí:
+
+    IntelliSense: Al usar <Alert ... />, VS Code te sugerirá text y type.
+    Seguridad: Si escribes type="blue", TS te avisará del error porque "blue" no está en la lista de valores permitidos.
+
+5. Lógica de Renderizado
+
+En React no tenemos directivas como ng-if o v-for. Usamos JavaScript puro dentro de las llaves { }.
+Renderizado Condicional (El "if")
+
+Como no podemos poner un bloque if/else dentro del JSX (porque es una expresión), usamos:
+
+    Operador Ternario (condicion ? true : false): Para elegir entre dos opciones.
+    Operador lógico AND (condicion && resultado): Para mostrar algo solo si la condición es verdadera.
+
+// Ejemplo dentro del JSX
+{isLoggedIn ? <LogoutButton /> : <LoginButton />}
+
+{hasError && <p className="error">Ocurrió un error</p>}
+Renderizado de Listas (El "loop")
+
+Usamos el método .map() de los arrays para transformar datos en elementos JSX.
+Importante: Cada elemento de una lista debe tener una prop única llamada key. React la usa para identificar qué ítems han cambiado, se han agregado o eliminado, optimizando el rendimiento.
+type ListProps = {
+  items: string[]; // Array de strings
+};
+
+export const ShoppingList = ({ items }: ListProps) => {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        // Usamos index como key solo si la lista es estática
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+};
+Resumen: Diferencias Clave
+Concepto 	Vanilla JS / HTML 	React + TS
+Bloques 	<div> repetidos 	<Componente /> reutilizable
+Clases CSS 	class="box" 	className="box"
+Datos dinámicos 	getElementById... 	{variable}
+Parámetros 	Argumentos sin validar 	Props tipadas (interface)
+Bucles 	for / innerHTML 	items.map(...)
+🛠️ Preparación para los Ejercicios
+
+Para los ejercicios que haremos a continuación, asegúrate de que tu entorno cumple con los requisitos técnicos:
+
+    Node.js instalado.
+    Visual Studio Code con la extensión ESLint y Prettier.
+    Proyecto iniciado (usaremos Vite para esta sesión):
+    npm create vite@latest mi-app-react -- --template react-ts
+
+

@@ -1,0 +1,111 @@
+
+Configuración del Laboratorio React y TypeScript
+
+Esta es la configuración estándar para el entorno de desarrollo del módulo. Sigue estos pasos para preparar tu laboratorio de React y TypeScript.
+1. Estructura de Archivos
+
+Crea una carpeta raíz para la asignatura (ej: Laboratorio-React) y genera la siguiente estructura de carpetas y archivos vacíos dentro de ella:
+
+📁 Laboratorio-React/           <-- Carpeta Raíz
+├── 📄 tsconfig.json            <-- (Archivo 1) En la raíz
+└── 📁 .devcontainer/           <-- Carpeta de configuración
+    ├── 📄 devcontainer.json    <-- (Archivo 2)
+    └── 📄 docker-compose.yml   <-- (Archivo 3)
+
+2. Contenido de los Archivos
+
+Copia el contenido exacto en cada uno de los archivos creados:
+Archivo 1: tsconfig.json
+
+(Configuración global para que VS Code reconozca la sintaxis moderna de TypeScript)
+
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+Archivo 2: .devcontainer/devcontainer.json
+
+(Instrucciones para VS Code: extensiones, configuración y la herramienta tsx)
+
+{
+  "name": "React + TS Lab",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "react-ts-dev",
+  "workspaceFolder": "/workspace",
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOpenssh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "dsznajder.es7-react-js-snippets",
+        "yoavbls.pretty-ts-errors",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+
+  "postCreateCommand": "npm install -g vite typescript tsx",
+  "remoteUser": "node"
+}
+
+Archivo 3: .devcontainer/docker-compose.yml
+
+(Definición del servicio Docker y apertura de puertos)
+
+version: '3.8'
+
+services:
+  react-ts-dev:
+    image: mcr.microsoft.com/devcontainers/typescript-node:20
+    container_name: react_ts_lab
+    command: sleep infinity 
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    ports:
+      # Rango de puertos para Apps Web (Next.js, CRA, etc.)
+      - "3000-3010:3000-3010"
+      # Rango de puertos para Vite (React Moderno)
+      - "5173-5183:5173-5183"
+
+3. Arranque e Instalación
+
+    Abre VS Code.
+    Ve a Archivo > Abrir Carpeta y selecciona tu carpeta raíz (Laboratorio-React).
+    VS Code detectará la configuración. Haz clic en el botón emergente "Reopen in Container".
+
+Nota: Si no aparece el botón emergente, pulsa F1 y busca "Dev Containers: Reopen in Container".
+
+Espera a que termine la instalación (puede tardar unos minutos la primera vez).
+4. Verificación
+
+Una vez dentro del contenedor (verás la etiqueta verde abajo a la izquierda), abre la terminal integrada (Ctrl + ñ) y escribe:
+
+tsx --version
+
+Si aparece un número de versión (ej: v4.7.1), el entorno está listo para trabajar con TypeScript y React.
+

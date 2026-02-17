@@ -1,0 +1,183 @@
+esión 6: Teoría
+📘 Material Didáctico: Sesión 6
+Fundamentos de Next.js (App Router)
+🎯 Objetivos de la sesión
+
+    Comprender la diferencia entre una Librería (React) y un Framework (Next.js).
+    Dominar el sistema de enrutamiento basado en archivos (App Router).
+    Aprender a compartir interfaz entre páginas usando Layouts.
+    Gestionar la navegación sin recargas usando el componente Link.
+    Crear rutas dinámicas (para fichas de producto, perfiles, etc.) y manejar errores 404.
+
+1. React vs. Next.js: ¿Por qué dar el salto?
+
+Hasta ahora hemos usado React (con Vite) para crear componentes. React es una librería: hace una cosa muy bien (crear interfaces de usuario), pero te deja a ti la responsabilidad de decidir qué herramientas usar para el enrutamiento, la carga de imágenes, el SEO, etc.
+Next.js es un Framework para React.
+Imagina que React es el motor de un coche. Next.js es el coche entero: ya viene con las ruedas, el chasis, el volante y el sistema de navegación instalados.
+
+Principales ventajas de Next.js (App Router):
+
+    Routing automático: No necesitas instalar react-router-dom. Las carpetas definen las rutas.
+    Renderizado Híbrido: Puede renderizar en el servidor (Server Components) o en el cliente.
+    Optimización: Carga de imágenes, fuentes y scripts optimizados automáticamente.
+
+2. El Sistema de Enrutamiento (App Router)
+
+En Next.js, la estructura de carpetas define la estructura de las URLs. Todo nuestro trabajo ocurrirá dentro de la carpeta app/.
+Reglas de Oro:
+
+    Carpetas = Rutas: El nombre de la carpeta es el segmento de la URL.
+    page.tsx = UI: Para que una ruta sea pública, la carpeta debe contener un archivo page.tsx. Si creas una carpeta sin este archivo, no será accesible (útil para guardar componentes internos).
+
+Visualización de Estructura:
+📂 app
+  📄 page.tsx (Inicio)
+  📂 contacto
+    📄 page.tsx (/contacto)
+  📂 blog
+    📂 primer-post
+      📄 page.tsx (/blog/primer-post)
+
+Ejemplo:
+
+    app/page.tsx → Ruta: / (Inicio)
+    app/contacto/page.tsx → Ruta: /contacto
+    app/blog/primer-post/page.tsx → Ruta: /blog/primer-post
+
+Código de una página básica (app/contacto/page.tsx):
+
+export default function ContactPage() {
+  return (
+    <main className="p-10">
+      <h1 className="text-3xl font-bold text-blue-600">Contáctanos</h1>
+      <p>Envíanos un correo a info@mitienda.com</p>
+    </main>
+  );
+}
+
+3. Layouts: Compartiendo UI (layout.tsx)
+
+A menudo queremos elementos que aparezcan en todas las páginas, como un Navbar o un Footer. En React tradicional, teníamos que importar el Navbar en cada página. En Next.js, usamos layout.tsx.
+
+El layout.tsx envuelve a las páginas (o a otros layouts anidados).
+
+    Root Layout (app/layout.tsx): Es obligatorio. Define las etiquetas <html> y <body>. Todo lo que pongas aquí aparecerá en toda la aplicación.
+
+Ejemplo de Root Layout con Navbar:
+
+import Navbar from "@/components/Navbar"; // Asumiendo que ya creaste el componente
+import "./globals.css";
+
+// Tipado para las props del layout
+interface RootLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <html lang="es">
+      <body className="bg-gray-50 text-gray-900">
+        {/* El Navbar se renderiza una vez y persiste al navegar */}
+        <Navbar />
+        
+        {/* 'children' es la página actual que estamos visitando */}
+        <div className="container mx-auto p-4">
+            {children}
+        </div>
+        
+        <footer className="bg-gray-800 text-white p-4 text-center">
+            © 2024 Mi Tienda Online
+        </footer>
+      </body>
+    </html>
+  );
+}
+
+4. Navegación SPA: El componente <Link>
+
+En HTML estándar usamos <a href="/contacto">. Esto provoca una recarga completa de la página (la pantalla parpadea en blanco, se pierden estados).
+
+En Next.js usamos el componente <Link>. Esto permite una navegación tipo SPA (Single Page Application): solo se cambia el contenido principal, sin recargar el navegador.
+
+import Link from "next/link";
+
+export default function Navbar() {
+  return (
+    <nav className="flex gap-4 p-4 bg-white shadow">
+      {/* INCORRECTO en Next.js (recarga la página) */}
+      <a href="/">Inicio (Lento)</a>
+
+      {/* CORRECTO (navegación instantánea) */}
+      <Link href="/" className="text-blue-500 hover:underline">
+        Inicio
+      </Link>
+      
+      <Link href="/catalogo" className="text-blue-500 hover:underline">
+        Catálogo
+      </Link>
+    </nav>
+  );
+}
+
+5. Rutas Dinámicas ([slug])
+
+¿Qué pasa si tenemos 1000 productos? No podemos crear 1000 carpetas (app/producto/1, app/producto/2...). Usamos segmentos dinámicos envolviendo el nombre de la carpeta entre corchetes.
+Estructura: app/productos/[id]/page.tsx
+
+Esta página capturará cualquier ruta como /productos/zapato, /productos/123, etc. El valor dinámico se recibe a través de las props bajo la clave params.
+
+Código (app/productos/[id]/page.tsx):
+
+interface ProductPageProps {
+  params: {
+    id: string; // El nombre coincide con el de la carpeta [id]
+  }
+}
+
+export default function ProductDetail({ params }: ProductPageProps) {
+  return (
+    <div className="p-10">
+      <h1 className="text-2xl font-bold">Detalle del Producto</h1>
+      <p className="mt-4">
+        Estás viendo el producto con ID: 
+        <span className="font-mono bg-yellow-200 px-2 rounded ml-2">
+            {params.id}
+        </span>
+      </p>
+      {/* Aquí más adelante haremos el fetch a la API usando este ID */}
+    </div>
+  );
+}
+
+6. Manejo de Errores 404 (not-found.tsx)
+
+Si un usuario navega a una URL que no existe, Next.js muestra un 404 genérico. Podemos personalizarlo creando un archivo not-found.tsx en la raíz de app/.
+
+También podemos activar este error programáticamente (por ejemplo, si buscamos un producto en la base de datos y no existe) usando la función notFound().
+
+Ejemplo (app/not-found.tsx):
+
+import Link from "next/link";
+
+export default function NotFound() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h2 className="text-4xl font-bold text-red-500">404</h2>
+      <p className="text-xl mb-4">Página no encontrada</p>
+      <Link 
+        href="/" 
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      >
+        Volver al Inicio
+      </Link>
+    </div>
+  );
+}
+
+📝 Resumen de Archivos Especiales en App Router
+Archivo 	Función
+page.tsx 	La interfaz única de una ruta. Hace la ruta accesible públicamente.
+layout.tsx 	Interfaz compartida (wrappers) para una ruta y sus hijas.
+not-found.tsx 	UI para errores 404 dentro de esa ruta.
+loading.tsx 	(Lo veremos en la Sesión 7) UI de carga automática.
+error.tsx 	(Avanzado) Manejo de errores en tiempo de ejecución.

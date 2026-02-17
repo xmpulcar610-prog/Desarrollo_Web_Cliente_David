@@ -1,0 +1,126 @@
+5. Operador Spread/Rest (...)
+El Operador Spread/Rest (...)
+
+En el ecosistema de JavaScript moderno (ES6 y posteriores), la sintaxis de los tres puntos consecutivos (...) representa una de las adiciones más versátiles y potentes del lenguaje. Dependiendo del contexto en el que se utilice, esta sintaxis desempeña dos funciones diametralmente opuestas pero complementarias: la expansión (Spread) y la recolección (Rest).
+
+Para el desarrollo en React, el dominio de estos operadores no es opcional; es fundamental. Se utilizan extensivamente para la manipulación inmutable del estado (State), la composición de propiedades (Props) y la gestión limpia de argumentos en funciones.
+Nota Importante sobre la Terminología:
+Aunque el símbolo es idéntico (...), el nombre del operador cambia según su ubicación:
+
+    Spread Operator (Operador de Propagación): Se usa en llamadas a funciones, arrays literales o asignación de objetos. Expande elementos.
+    Rest Parameter (Parámetro Rest): Se usa en definiciones de funciones o en destructuraciones. Agrupa elementos.
+
+1. Spread Operator: La Expansión de Iterables
+
+El Spread Operator permite que una expresión iterable (como un array o una cadena de texto) sea expandida en lugares donde se esperan cero o más argumentos (para llamadas a funciones) o elementos (para arrays literales).
+1.1. Manipulación de Arrays e Inmutabilidad
+
+En React, nunca debemos mutar el estado directamente (p.ej., push()). El Spread Operator nos permite crear copias de arrays añadiendo nuevos elementos sin modificar el original.
+
+// ARRAY SPREAD: Copia y Concatenación
+
+const frutasIniciales = ["Manzana", "Pera"];
+const frutasCitricas = ["Naranja", "Limón"];
+
+// Forma antigua (ES5) - Método concat
+const macedoniaES5 = frutasIniciales.concat(frutasCitricas);
+
+// Forma moderna (ES6) - Spread Operator
+// Expande los elementos de ambos arrays dentro de uno nuevo
+const macedoniaES6 = [...frutasIniciales, ...frutasCitricas];
+
+// Añadir elementos al principio o final sin mutar (Patrón común en Redux/React)
+const listaActualizada = ["Plátano", ...frutasIniciales, "Sandía"];
+
+console.log(listaActualizada); 
+// Salida: ["Plátano", "Manzana", "Pera", "Sandía"]
+
+1.2. Spread en Objetos (ES2018)
+
+Quizás el uso más frecuente en React es la actualización de objetos de estado. Dado que setState o los reducers de Redux requieren un nuevo objeto para detectar cambios, el spread operator facilita la creación de una copia superficial (shallow copy) sobreescribiendo propiedades específicas.
+
+// OBJECT SPREAD: Actualización inmutable
+
+const usuario = {
+    id: 1,
+    nombre: "Ana",
+    rol: "Editor",
+    config: { tema: "oscuro" }
+};
+
+// Queremos actualizar el rol a "Admin" sin modificar el objeto original 'usuario'
+// 1. Copiamos todas las propiedades de usuario (...)
+// 2. Sobreescribimos la propiedad 'rol'
+const usuarioActualizado = {
+    ...usuario,
+    rol: "Admin"
+};
+
+console.log(usuarioActualizado);
+// Salida: { id: 1, nombre: "Ana", rol: "Admin", config: { tema: "oscuro" } }
+
+// IMPORTANTE: El orden importa. Si ponemos el spread al final,
+// sobreescribiríamos nuestros cambios con los valores antiguos.
+const errorComun = {
+    rol: "Admin",
+    ...usuario // Esto volverá a poner rol: "Editor"
+};
+
+Advertencia: Copia Superficial (Shallow Copy)
+
+El operador Spread solo realiza una copia del primer nivel de profundidad. Si el objeto contiene otros objetos anidados (como config en el ejemplo anterior), estos sub-objetos siguen compartiendo la misma referencia en memoria. Para copias profundas (Deep Copy), se requeriría structuredClone() o librerías externas.
+2. Rest Parameter: La Recolección de Argumentos
+
+Mientras Spread "desempaqueta", Rest "empaqueta". Nos permite representar un número indefinido de argumentos como un array. En la definición de funciones, debe ser siempre el último parámetro.
+2.1. Rest en Funciones
+
+// REST PARAMETER: Agrupando argumentos
+
+function sumarTodo(...numeros) {
+    // 'numeros' es ahora un array real [10, 20, 30, 40]
+    return numeros.reduce((total, num) => total + num, 0);
+}
+
+console.log(sumarTodo(10, 20, 30, 40)); // Salida: 100
+
+// Combinando parámetros fijos con Rest
+function presentarEquipo(lider, ...miembros) {
+    console.log(`Líder: ${lider}`);
+    console.log(`Miembros: ${miembros.join(", ")}`);
+}
+
+presentarEquipo("Carlos", "Sofía", "Miguel", "Lucía");
+// Líder: Carlos
+// Miembros: Sofía, Miguel, Lucía
+
+2.2. Destructuración con Rest (Patrón en Props de React)
+
+Una técnica extremadamente común en React es extraer ciertas propiedades de un objeto (props) y agrupar el "resto" en una variable separada para pasarla a componentes hijos.
+
+// DESTRUCTURACIÓN Y REST
+
+const propsDelBoton = {
+    className: "btn-primary",
+    onClick: () => console.log("Click"),
+    id: "btn-guardar",
+    disabled: true,
+    label: "Guardar Cambios"
+};
+
+// Extraemos 'label' específicamente, y agrupamos todo lo demás en 'otrasProps'
+const { label, ...otrasProps } = propsDelBoton;
+
+console.log(label);      // "Guardar Cambios"
+console.log(otrasProps); // { className: "...", onClick: ..., id: "...", disabled: true }
+
+// En JSX (React) esto permite pasar props limpiamente:
+// <button {...otrasProps}>{label}</button>
+
+3. Resumen Comparativo
+Característica 	Spread (...) 	Rest (...)
+Acción Principal 	Expande / Desempaqueta 	Agrupa / Recolecta
+Contexto de Uso 	Llamadas a función, Literales de Array/Objeto 	Parámetros de función, Destructuración
+Resultado 	Lista de argumentos o elementos individuales 	Un Array (o un Objeto en destructuración)
+
+La maestría sobre estos operadores reduce drásticamente la verbosidad del código y es un requisito indispensable para comprender patrones avanzados en librerías como React y Redux.
+

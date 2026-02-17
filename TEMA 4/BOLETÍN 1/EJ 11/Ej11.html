@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicio 11</title>
+  </head>
+  <body>
+    <p><b>A partir del documento HTML proporcionado para este ejercicio, implementar las funciones javascript necesarias para iniciar una promesa y atenderla si se pulsa el botón “Procesar Promesa” antes de 2 segundos. En el caso de no ser pulsado en ese plazo, la promesa no será atendida y se procesará un error. En el párrafo de salida se debe mostrar el mensaje que devuelva el objeto Promise, debiendo coger éste lo que el usuario haya indicado en el formulario de entrada para reflejar los mensajes de éxito y de error.</b></p>
+    <h1>Probando instancias del objeto Promise</h1>
+
+    <label>Mensaje de Éxito: </label>
+    <input type="text" id="msjExito" />
+    <label>Mensaje de Error: </label>
+    <input type="text" id="msjError" /><br /><br />
+
+    <button id="iniciaPromesa">Iniciar Promesa</button>
+    <button id="procesarPromesa">Procesar Promesa</button>
+
+    <p id="salida"></p>
+    <script src="./ej11.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,87 @@
+Sesión 5: Teoría
+📘 Material Docente: Sesión 5
+Estilizado Moderno con Tailwind CSS (Versión 4)
+1. Introducción: El paradigma "Utility-First"
+
+Hasta ahora, hemos estilizado usando archivos CSS tradicionales y clases semánticas (ej: .card). Esto conlleva problemas como archivos gigantes y nombres de clases inventados.
+
+Tailwind CSS propone usar Clases de Utilidad. En lugar de escribir CSS nuevo, aplicas clases predefinidas directamente en tu HTML/JSX que representan propiedades CSS exactas.
+Ejemplo Comparativo
+
+CSS Tradicional:
+.notification {
+  display: flex;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+Tailwind CSS (v4):
+// Directamente en el componente
+<div className="flex p-6 bg-white rounded-lg shadow-md">
+  {/* Contenido */}
+</div>
+2. Configuración en v4: "CSS-First"
+
+La gran novedad de la versión 4 es que desaparece el archivo tailwind.config.js por defecto. Ahora Tailwind se comporta como un motor CSS nativo.
+
+En lugar de múltiples directivas, ahora solo necesitamos una línea en nuestro archivo CSS principal (src/index.css):
+@import "tailwindcss";
+3. Personalización con @theme
+
+Para definir colores corporativos o fuentes, lo hacemos directamente en el CSS usando bloques @theme.
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3498db;
+  --font-family-sans: "Inter", sans-serif;
+  --spacing-128: 32rem;
+}
+4. El Sistema de Diseño: Espaciado y Tamaño
+
+La regla de oro se mantiene: 1 unidad = 0.25rem (4px).
+Clase 	CSS Equivalente 	Píxeles (aprox)
+p-1 	padding: 0.25rem; 	4px
+p-4 	padding: 1rem; 	16px
+size-4 	width: 1rem; height: 1rem; 	16px (Nuevo v4)
+5. Layout: Flexbox y Grid
+Flexbox (flex)
+// Centrado perfecto absoluto
+<div className="flex justify-center items-center h-screen">
+  <h1>Hola Mundo</h1>
+</div>
+Grid (grid)
+// Rejilla de 3 columnas
+<div className="grid grid-cols-3 gap-4">
+  <div>A</div>
+  <div>B</div>
+  <div>C</div>
+</div>
+6. Diseño Responsivo (Mobile-First)
+
+En Tailwind, todo es móvil por defecto. Usamos prefijos para pantallas más grandes.
+{/* Ancho completo en móvil, auto en escritorio */}
+<button className="w-full md:w-auto bg-blue-500 text-white">
+  Click
+</button>
+7. Estados y Estilos Condicionales
+
+Tailwind v4 mantiene el sistema de prefijos para interactividad.
+<button className="bg-blue-500 hover:bg-blue-700 active:scale-95 disabled:opacity-50">
+  Enviar
+</button>
+Librería clsx
+import clsx from 'clsx';
+
+<div className={clsx(
+  "p-4 rounded border", // Base
+  isActive ? "border-blue-500" : "border-gray-200" // Condicional
+)}>
+Resumen de Clases Frecuentes (v4)
+Categoría 	Clases Útiles
+Texto 	text-sm, font-bold, text-center, text-slate-500
+Fondo 	bg-white, bg-blue-600, bg-black/50 (opacidad)
+Flexbox 	flex, flex-col, items-center, justify-between
+Grid 	grid, grid-cols-1, md:grid-cols-3, gap-6
+Espaciado 	m-0, mx-auto, p-4, space-x-4

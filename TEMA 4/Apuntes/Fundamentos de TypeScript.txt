@@ -1,0 +1,107 @@
+Fundamentos de TypeScript para React
+
+Guía de Supervivencia para Desarrolladores Vanilla JS.
+Este documento resume los conceptos teóricos clave que trabajarás en los ejercicios prácticos. El objetivo no es aprenderse la documentación de TypeScript de memoria, sino entender las herramientas específicas que necesitas para construir componentes en React de forma robusta.
+1. Interfaces y Propiedades Opcionales
+
+En Vanilla JS, pasamos objetos de un lado a otro sin estar seguros de qué propiedades tienen. En React, los componentes reciben información a través de Props (que no es más que un objeto).
+El Concepto: interface
+
+Una interfaz es un "contrato". Define la forma exacta que debe tener un objeto. Si intentas acceder a una propiedad que no está en la interfaz, o le pasas un dato del tipo incorrecto, TypeScript te avisará antes de compilar.
+El modificador ? (Opcional)
+
+A veces, un dato no es obligatorio. Añadiendo un signo de interrogación ? después del nombre de la propiedad, le decimos a TS que esa propiedad puede ser del tipo definido o undefined (puede no existir).
+⚛️ ¿Por qué lo necesitas para React?
+
+Para definir las Props de tus componentes. Si un componente requiere un título pero el subtítulo es extra, usarás ?. Esto habilita el autocompletado en tu editor cuando uses el componente.
+
+interface Usuario {
+  nombre: string;
+  email: string;
+  telefono?: string; // Puede no tener teléfono
+}
+
+2. Union Types y Literal Types
+
+En Vanilla JS es común usar "Magic Strings": cadenas de texto que escribimos manualmente y que son propensas a errores. TypeScript soluciona esto restringiendo los valores posibles.
+El Concepto: Union Types (|)
+
+El operador pipe (|) funciona como un "O". Permite que una variable acepte más de un tipo de dato. Por ejemplo: type ID = string | number;
+El Poder Real: Literal Types
+
+Aquí es donde ocurre la magia. En lugar de decir que una variable es string (que admite infinitas palabras), definimos una lista cerrada de valores exactos. Si intentas asignar algo fuera de esa lista, tu código marcará error.
+⚛️ ¿Por qué lo necesitas para React?
+
+Para la Gestión de Estados (State). Evita usar múltiples booleanos sueltos (isLoading, isError). Además, al escribir el código, el editor te sugerirá solo las opciones válidas.
+
+type Alineacion = 'left' | 'center' | 'right';
+
+type EstadoCarga = 'idle' | 'loading' | 'success' | 'error';
+
+function mostrarAlerta(estado: EstadoCarga) {
+   if (estado === 'error') { 
+      // Solo entra si es exactamente 'error'
+   }
+}
+
+3. Tipado de Funciones: Argumentos y Retornos
+
+En JavaScript, las funciones son flexibles: reciben lo que sea y devuelven lo que sea. Esto es una fuente de bugs. En TypeScript, "candamos" la entrada y la salida.
+Sintaxis Básica
+
+Debemos indicar el tipo de cada parámetro y, opcionalmente, el tipo de retorno después de los paréntesis.
+(a: number, b: number): number
+El tipo void
+
+Muchas funciones en frontend no devuelven un cálculo, sino que "hacen algo" (cambiar el DOM, lanzar una alerta, guardar en base de datos). Para indicar que una función no devuelve nada, usamos el tipo void.
+⚛️ ¿Por qué lo necesitas para React?
+
+Esencial para los Event Handlers. Cuando pasas una función onClick a un componente hijo, debes definir en la interfaz del hijo qué argumentos espera esa función y aclarar que devuelve void.
+
+// 1. Tipado explícito de argumentos y retorno
+const sumar = (a: number, b: number): number => {
+  return a + b;
+};
+
+// 2. Void y Callbacks (Caso Real React)
+interface PropsBoton {
+  label: string;
+  // "onClick" es una función que recibe un numero y no devuelve nada
+  onClick: (id: number) => void; 
+}
+
+4. Arrays y Seguridad ante undefined
+
+Definimos listas como Usuario[] o number[]. Lo importante aquí es usar métodos como .find(). En Vanilla JS asumes que encontrarás el elemento. En TS, el método devuelve Elemento | undefined. TS te obligará a comprobar si el elemento existe antes de usarlo.
+⚛️ ¿Por qué lo necesitas para React?
+
+Para renderizar listas con .map(). React es muy sensible a los errores; si intentas pintar usuario.nombre y usuario es undefined, la app explota (pantalla en blanco).
+5. Genéricos (Generics)
+
+Imagina <T> como una variable para tipos. En lugar de pasar un valor, pasas un tipo. Esto permite que la función capture el tipo de dato que le entra y lo use para definir su salida.
+⚛️ ¿Por qué lo necesitas para React?
+
+Fundamentalmente para el hook useState. Cuando inicias un estado vacío, TS necesita saber qué habrá ahí en el futuro.
+
+// Le decimos a useState que contendrá un Usuario eventualmente
+const [user, setUser] = useState<Usuario | null>(null);
+
+6. El "Reducer" (Discriminated Unions)
+
+Consiste en unir varias interfaces que tienen una propiedad común (generalmente llamada type o kind) con valores literales únicos. TS sabe que si compruebas esa propiedad, el resto del objeto tiene la forma correspondiente.
+⚛️ ¿Por qué lo necesitas para React?
+
+Para useReducer. Es la forma estándar de manejar estados complejos donde una acción tiene unos datos (payload) y otra tiene otros.
+
+type Accion =
+  | { tipo: 'LOGIN'; token: string } // Si es LOGIN, tiene token
+  | { tipo: 'LOGOUT' };              // Si es LOGOUT, no tiene nada más
+
+🚀 Resumen para React
+Concepto Vanilla JS 	Concepto TypeScript 	Uso en React
+Objeto flexible 	Interface 	Definir Props
+Variable multiusos 	Union Type (|) 	Estados (loading, error)
+Callbacks dinámicos 	Function Types 	Eventos (onClick)
+Array.find() 	Manejo de undefined 	Listas y selección
+Funciones universales 	Genéricos <T> 	useState<T>, Hooks
+Switch/Case lógico 	Discriminated Unions 	useReducer, Redux

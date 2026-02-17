@@ -1,0 +1,99 @@
+Sesión 3: Teoría
+📘 Material Docente: Sesión 3
+Ciclo de Vida, Efectos (useEffect) y Referencias (useRef)
+1. ¿Qué es un "Efecto Secundario" (Side Effect)?
+
+En programación funcional, una función pura es aquella que, dada una entrada, siempre devuelve la misma salida sin modificar nada fuera de ella. Los componentes de React intentan ser puros: reciben Props y devuelven JSX.
+
+Sin embargo, las aplicaciones reales necesitan hacer cosas que escapan a este flujo, como conectarse a un servidor, manipular el DOM manualmente o configurar temporizadores. A estas acciones las llamamos Efectos Secundarios.
+2. El Hook useEffect
+
+El hook useEffect permite ejecutar código arbitrario después de que React haya renderizado el componente. Es la herramienta para sincronizar tu componente con sistemas externos.
+useEffect(() => {
+  // Lógica del efecto (se ejecuta después del render)
+  console.log('El componente se ha renderizado');
+
+  return () => {
+    // (Opcional) Función de limpieza
+  };
+}, [/* Array de dependencias */]);
+El Array de Dependencias (Vital)
+
+El segundo argumento controla cuándo se ejecuta el efecto.
+Dependencias 	Comportamiento 	Cuándo usarlo
+Sin array 	Se ejecuta en CADA renderizado. 	Rara vez (peligroso).
+[] (Vacío) 	Se ejecuta SOLO UNA VEZ (al montar). 	Peticiones API iniciales, eventos globales.
+[prop, estado] 	Se ejecuta al montar Y si cambia la variable. 	Sincronización de datos dinámicos.
+3. La Función de Limpieza (Cleanup Function)
+
+A veces, los efectos crean conexiones (eventos, timers) que deben cerrarse cuando el componente desaparece para evitar fugas de memoria.
+useEffect(() => {
+  // 1. Configuración (Setup)
+  const handleResize = () => console.log(window.innerWidth);
+  window.addEventListener('resize', handleResize);
+
+  // 2. Limpieza (Cleanup) - ¡Se ejecuta al desmontar!
+  return () => {
+    window.removeEventListener('resize', handleResize);
+    console.log('Limpieza realizada');
+  };
+}, []); // Array vacío: setup al montar, cleanup al desmontar.
+4. useRef: Accediendo al DOM y Memoria Muda
+
+useRef devuelve un objeto mutable { current: ... }. Tiene dos usos principales que lo diferencian de useState.
+A. Referencia al DOM
+
+Para acceder a elementos reales HTML (como hacer focus en un input).
+const FocusInput = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  return <input ref={inputRef} />;
+};
+B. Diferencias con useState
+Característica 	useState 	useRef
+Mutabilidad 	Inmutable (usar setter) 	Mutable (.current = x)
+Re-renderiza 	Sí, al cambiar 	No
+5. Fetching de Datos Básico (Client-Side)
+
+El patrón estándar implica gestionar 3 estados: Data, Loading y Error.
+const UserList = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Definimos la función asíncrona DENTRO del efecto
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('https://api.com/users');
+        if (!response.ok) throw new Error('Error al cargar');
+        
+        const data = await response.json();
+        setUsers(data);
+      } catch (err) {
+        if (err instanceof Error) setError(err.message);
+      } finally {
+        setIsLoading(false); // Quitamos cargando siempre
+      }
+    };
+
+    fetchUsers();
+  }, []); // [] -> Solo al cargar la página
+
+  if (isLoading) return <p>Cargando...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return <ul>{users.map(u => <li>{u.name}</li>)}</ul>;
+};
+6. Reglas de los Hooks
+
+    Solo llamar Hooks en el nivel superior: No ponerlos dentro de loops (for), condiciones (if) o funciones anidadas.
+    Solo llamar Hooks desde componentes de React: No desde funciones JS normales.
+
+

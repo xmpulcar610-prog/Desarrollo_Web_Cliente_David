@@ -1,0 +1,110 @@
+1. const vs let
+Fundamentos de JavaScript Moderno: La dicotomía entre const y let
+
+En el ecosistema del desarrollo web actual, y específicamente en la arquitectura de aplicaciones basadas en React, la gestión del estado y el ámbito (scope) de las variables constituye uno de los pilares fundamentales para escribir código predecible, mantenible y libre de errores. Con la llegada de ECMAScript 2015 (ES6), JavaScript introdujo dos nuevas primitivas para la declaración de variables: const y let, marcando un cambio de paradigma respecto a la tradicional y problemática sentencia var.
+Nota Preliminar: Este artículo asume que el lector busca transicionar hacia patrones de diseño modernos. En el desarrollo profesional de React, el uso de var se considera obsoleto debido a su comportamiento de Function Scope y Hoisting (elevación), los cuales propician efectos secundarios no deseados.
+1. El Concepto de Ámbito de Bloque (Block Scope)
+
+La diferencia más sustancial que introducen let y const es el manejo del alcance léxico. A diferencia de var, que limita la visibilidad de la variable a la función contenedora, las nuevas declaraciones respetan el ámbito de bloque. Un bloque es cualquier código delimitado por llaves {} (estructuras if, bucles for, etc.).
+
+Esto permite un control mucho más granular sobre el ciclo de vida de los datos, evitando la contaminación del ámbito global o funcional superior, un principio crítico en la programación funcional que promueve React.
+2. La Sentencia let: Mutabilidad Controlada
+
+La palabra reservada let se utiliza para declarar variables cuyo valor se espera que cambie durante la ejecución del bloque. Es la sustitución directa de la lógica de asignación variable, pero con seguridad de ámbito.
+Características Clave:
+
+    Reasignable: Se puede cambiar su valor tantas veces como sea necesario dentro de su ámbito.
+    No redeclarable: No se puede declarar la misma variable dos veces en el mismo ámbito (esto arroja un SyntaxError), protegiendo contra la duplicidad accidental.
+    Zona Muerta Temporal (TDZ): A diferencia de var, acceder a una variable let antes de su declaración resulta en un ReferenceError, obligando a un flujo de código más ordenado.
+
+A continuación, observamos un ejemplo práctico de let en un contexto lógico:
+
+function procesarDatos(condicion) {
+    // 'resultado' solo existe dentro de esta función
+    let resultado = 0;
+
+    if (condicion) {
+        // Este 'mensaje' solo existe dentro del bloque if
+        let mensaje = "Procesando..."; 
+        resultado = 100; 
+        console.log(mensaje); 
+    }
+
+    // console.log(mensaje); // Error: mensaje is not defined
+    return resultado;
+}
+
+3. La Sentencia const: Inmutabilidad de Asignación
+
+La palabra reservada const es, sin duda, la herramienta más utilizada en el desarrollo moderno de React. Su propósito es declarar constantes de solo lectura. Sin embargo, existe una confusión semántica común que es necesario aclarar con rigor.
+Concepto Crítico: const no define un valor inmutable, sino una referencia inmutable (binding). Esto significa que el identificador no puede ser reasignado a una nueva referencia en memoria, pero el valor al que apunta (si es un objeto o array) sí puede sufrir mutaciones internas.
+3.1. Tipos Primitivos vs. Tipos de Referencia
+
+Para tipos primitivos (Number, String, Boolean), const funciona como una constante matemática estricta. Para Objetos y Arrays, garantiza que la variable siempre apunte al mismo objeto, pero las propiedades de ese objeto pueden cambiar.
+
+// --- CASO 1: Primitivos (Inmutabilidad total) ---
+const PI = 3.14159;
+// PI = 3.14; // Uncaught TypeError: Assignment to constant variable.
+
+// --- CASO 2: Objetos (Inmutabilidad de referencia) ---
+const usuario = {
+    id: 1,
+    nombre: "Ana"
+};
+
+// ESTO ESTÁ PERMITIDO: Mutar el contenido
+usuario.nombre = "Ana María"; 
+
+console.log(usuario.nombre); // "Ana María"
+
+// ESTO ESTÁ PROHIBIDO: Reasignar la referencia
+// usuario = { id: 2, nombre: "Pedro" }; // Error crítico
+
+4. Aplicación Práctica en React
+
+En el contexto de React, la preferencia por const es abrumadora (aproximadamente el 95% de las declaraciones). Esto se debe a que React favorece la inmutabilidad y el flujo de datos unidireccional.
+Uso de const en Componentes Funcionales
+
+Cuando definimos componentes, hooks, o manejadores de eventos, utilizamos const para asegurar que esas funciones no sean redefinidas accidentalmente dentro del cuerpo del módulo.
+
+import React, { useState } from 'react';
+
+// 1. Declaración del componente con const
+const Contador = () => {
+    // 2. Destructuración de Hooks con const
+    // useState retorna un array fijo, no queremos reasignar 'count' o 'setCount'
+    const [count, setCount] = useState(0);
+
+    // 3. Funciones manejadoras (handlers) con const
+    const incrementar = () => {
+        setCount(prev => prev + 1);
+    };
+
+    // 4. Variables derivadas (Computed values)
+    // Se calculan en cada render, pero dentro de este ciclo, es constante
+    const esPar = count % 2 === 0;
+
+    return (
+        <div>
+            <p>Valor: {count} es {esPar ? "Par" : "Impar"}</p>
+            <button onClick={incrementar}>Sumar</button>
+        </div>
+    );
+};
+
+5. Tabla Comparativa de Referencia
+Característica 	var (Obsoleto) 	let 	const
+Ámbito (Scope) 	Función 	Bloque {} 	Bloque {}
+Reasignable 	Sí 	Sí 	No
+Redeclarable 	Sí (Peligroso) 	No 	No
+Hoisting 	Sí (inicializa undefined) 	No (TDZ) 	No (TDZ)
+6. Mejores Prácticas y Conclusión
+
+Para cerrar este análisis técnico, se propone la siguiente regla de oro para el desarrollo en JavaScript moderno y React:
+
+    Por defecto, usa const: Asume que la variable no va a cambiar. Esto comunica claramente tu intención a otros desarrolladores y al compilador, haciendo el código más fácil de leer.
+    Usa let solo cuando sea estrictamente necesario: Resérvalo para contadores de bucles, acumuladores o banderas lógicas que requieren reasignación explícita.
+    Evita var completamente: No existen razones técnicas modernas para justificar su uso en proyectos nuevos de React.
+
+Dominar la distinción entre estas declaraciones no es solo una cuestión de sintaxis, sino de comprender cómo gestiona la memoria JavaScript y cómo podemos escribir aplicaciones más robustas previniendo errores de mutación accidental.
+
