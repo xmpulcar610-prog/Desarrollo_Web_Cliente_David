@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechCare – Centro de Reparaciones</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/techcare.css">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">TechCare – Centro de Reparaciones</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="#" onclick="gestionFormularios('frmAltaCliente')">Alta de cliente</a></li>
+        <li><a href="#" onclick="gestionFormularios('frmRegistrarDispositivo')">Registrar dispositivo</a></li>
+        <li><a href="#" onclick="gestionFormularios('frmAbrirReparacion')">Abrir reparación</a></li>
+        <li><a href="#" onclick="gestionFormularios('frmActualizarEstado')">Actualizar estado / técnico</a></li>
+        <li><a href="#" onclick="gestionFormularios('frmListadoEstado')">Listado por estado</a></li>
+        <li><a href="#" onclick="gestionFormularios('TotalGarantia')">Total reparaciones en garantía</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid" id="formularios" style="margin-top:90px;">
+    <!-- Alta de cliente -->
+    <form class="form-horizontal" id="frmAltaCliente" name="frmAltaCliente">
+      <fieldset>
+        <legend>Alta de cliente</legend>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">DNI</label>
+          <div class="col-xs-4"><input id="txtDNI" class="form-control" placeholder="12345678A"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Nombre</label>
+          <div class="col-xs-4"><input id="txtNombre" class="form-control" placeholder="Nombre y apellidos"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Teléfono</label>
+          <div class="col-xs-4"><input id="txtTelefono" class="form-control" placeholder="600123123"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Email</label>
+          <div class="col-xs-4"><input id="txtEmail" class="form-control" placeholder="cliente@email.com"></div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-4 col-xs-4">
+            <input type="button" class="btn btn-primary" value="Aceptar" onclick="aceptarAltaCliente();">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Registrar dispositivo -->
+    <form class="form-horizontal" id="frmRegistrarDispositivo" name="frmRegistrarDispositivo">
+      <fieldset>
+        <legend>Registrar dispositivo</legend>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Nº de serie</label>
+          <div class="col-xs-4"><input id="txtSerie" class="form-control" placeholder="SN-XXXX"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Marca</label>
+          <div class="col-xs-4"><input id="txtMarca" class="form-control" placeholder="Apple, Samsung..."></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Modelo</label>
+          <div class="col-xs-4"><input id="txtModelo" class="form-control" placeholder="iPhone 14, Galaxy S22..."></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Garantía</label>
+          <div class="col-xs-4">
+            <label class="radio-inline"><input type="radio" name="rbtGarantia" value="S" checked> Sí</label>
+            <label class="radio-inline"><input type="radio" name="rbtGarantia" value="N"> No</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-4 col-xs-4">
+            <input type="button" class="btn btn-primary" value="Aceptar" onclick="aceptarRegistrarDispositivo();">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Abrir reparación -->
+    <form class="form-horizontal" id="frmAbrirReparacion" name="frmAbrirReparacion">
+      <fieldset>
+        <legend>Abrir reparación</legend>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Nº de serie (dispositivo)</label>
+          <div class="col-xs-4"><input id="txtSerieRep" class="form-control" placeholder="SN-XXXX"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">DNI Cliente</label>
+          <div class="col-xs-4"><input id="txtDNIRep" class="form-control" placeholder="12345678A"></div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-4 col-xs-4">
+            <input type="button" class="btn btn-primary" value="Aceptar" onclick="aceptarAbrirReparacion();">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Actualizar estado / técnico / cierre -->
+    <form class="form-horizontal" id="frmActualizarEstado" name="frmActualizarEstado">
+      <fieldset>
+        <legend>Actualizar estado / técnico / cierre</legend>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Código reparación</label>
+          <div class="col-xs-4"><input id="txtCodRep" class="form-control" placeholder="1, 2, 3..."></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Nuevo estado</label>
+          <div class="col-xs-4">
+            <select id="selEstado" class="form-control">
+              <option value="abierta">Abierta</option>
+              <option value="diagnostico">Diagnóstico</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="cerrada">Cerrada</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Técnico (opcional)</label>
+          <div class="col-xs-4"><input id="txtTecnico" class="form-control" placeholder="Nombre técnico"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Coste (al cerrar)</label>
+          <div class="col-xs-4"><input id="txtCoste" class="form-control" placeholder="0.00"></div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-4 col-xs-4">
+            <input type="button" class="btn btn-primary" value="Aceptar" onclick="aceptarActualizarEstado();">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Listado por estado -->
+    <form class="form-horizontal" id="frmListadoEstado" name="frmListadoEstado">
+      <fieldset>
+        <legend>Listado de reparaciones por estado</legend>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">Estado</label>
+          <div class="col-xs-4">
+            <select id="selEstadoListado" class="form-control">
+              <option value="abierta">Abierta</option>
+              <option value="diagnostico">Diagnóstico</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="cerrada">Cerrada</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-4 col-xs-4">
+            <input type="button" class="btn btn-primary" value="Aceptar" onclick="aceptarListadoEstado();">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <script src="js/objetos.js"></script>
+  <script src="js/codigo.js"></script>
+</body>
+</html>

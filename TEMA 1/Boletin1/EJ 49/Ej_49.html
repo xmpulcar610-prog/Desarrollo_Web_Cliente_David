@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ej 49</title>
+    </head>
+<body>
+    <h1>49.- Preparar un documento HTML con un formulario que solicite una fecha (día, mes y año) y un botón 
+        para calcular el día siguiente. Al pulsarlo se debe imprimir en una capa de salida la fecha del día 
+        siguiente a la introducida por el usuario. En este ejercicio no está permitido el uso del objeto DATE 
+        de javascript.</h1>
+    <form name="frmFecha">
+      <h3>Fecha (dd / mm / aa)</h3>
+      <input type="number" name="dd" max="31" min="1" required></input>
+      <label>:</label>
+      <input type="number" name="mm" max="12" min="1" required></input>
+      <label>:</label>
+      <input type="number" name="aa" min="1" required></input>
+    </form>
+    <br /><br />
+    <button onclick="diaSiguiente()">Día siguiente</button><br>
+    <div id="salida"></div>
+    <script src="./ej_49.js"></script>
+</body>
+</html>

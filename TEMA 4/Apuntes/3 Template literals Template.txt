@@ -1,0 +1,124 @@
+3. Template literals
+Template Literals
+
+En el ecosistema del desarrollo web moderno, y muy especialmente en el contexto de librerías basadas en componentes como React, la manipulación eficiente de cadenas de texto es una necesidad fundamental. La especificación ECMAScript 2015 (ES6) introdujo una de las características más aclamadas por la comunidad: los Template Literals (anteriormente conocidos como Template Strings).
+
+Este recurso didáctico explora en profundidad la sintaxis, las capacidades de interpolación y el uso avanzado de esta herramienta, superando la simple concatenación para adentrarnos en la metaprogramación mediante etiquetas (Tagged Templates).
+1. Definición y Sintaxis Básica
+
+Un Template Literal es un literal de cadena que permite incrustar expresiones (interpolación), definir cadenas en múltiples líneas y realizar formateo de texto avanzado. A diferencia de las cadenas tradicionales delimitadas por comillas simples (') o dobles ("), los Template Literals utilizan comillas invertidas o backticks (`).
+Nota Conceptual: Aunque a menudo se les llama "cadenas mejoradas", técnicamente son una estructura sintáctica distinta que devuelve cadenas. Su flexibilidad es vital en React para la construcción dinámica de clases CSS, rutas de URL y renderizado condicional de atributos.
+Comparativa: ES5 vs ES6
+
+En versiones anteriores a ES6, la concatenación de variables requería el operador de suma (+), lo que resultaba en un código propenso a errores tipográficos, especialmente con el manejo de espacios en blanco.
+
+// --- ES5: Concatenación Tradicional ---
+const nombre = "Estudiante";
+const curso = "React Avanzado";
+
+// Requiere gestión manual de espacios y comillas
+const mensajeES5 = "Bienvenido, " + nombre + ". Estás en el curso de " + curso + ".";
+
+// --- ES6: Template Literals ---
+// Sintaxis más limpia y legible usando backticks (`)
+const mensajeES6 = `Bienvenido, ${nombre}. Estás en el curso de ${curso}.`;
+
+console.log(mensajeES5 === mensajeES6); // true
+
+2. Interpolación de Expresiones
+
+La verdadera potencia reside en la sintaxis ${expresión}. Dentro de estas llaves, JavaScript no se limita a recibir variables; acepta cualquier expresión válida de JavaScript que produzca un valor. Esto incluye:
+
+    Operaciones matemáticas.
+    Llamadas a funciones.
+    Operadores ternarios (crucial para lógica en vistas).
+    Acceso a propiedades de objetos.
+
+const producto = { nombre: "Laptop", precio: 1200, impuesto: 0.21 };
+
+function formatearMoneda(valor) {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(valor);
+}
+
+// Interpolación compleja: Cálculos y llamadas a función dentro del string
+const resumen = `
+    Producto: ${producto.nombre}
+    Precio Base: ${formatearMoneda(producto.precio)}
+    Total con IVA: ${formatearMoneda(producto.precio * (1 + producto.impuesto))}
+`;
+
+console.log(resumen);
+
+3. Cadenas Multilínea
+
+Antes de ES6, para crear una cadena que ocupara varias líneas, era necesario utilizar el carácter de escape de nueva línea (\n) combinado con el operador de concatenación al final de cada línea para evitar errores de sintaxis.
+
+Los Template Literals preservan los espacios en blanco y los saltos de línea tal y como se escriben en el código fuente. Esto es excepcionalmente útil cuando necesitamos generar fragmentos de HTML crudo, emails formateados o contenido estructurado.
+
+const usuario = { nombre: "Maria", rol: "Admin" };
+
+// Generación de una plantilla HTML limpia
+// Nota cómo se respeta la indentación visual
+const tarjetaUsuario = `
+  <div class="user-card">
+      <h2>${usuario.nombre}</h2>
+      <p>Rol: ${usuario.rol}</p>
+      <p>Estado: ${usuario.rol === 'Admin' ? 'Activo' : 'Restringido'}</p>
+  </div>
+`;
+
+console.log(tarjetaUsuario);
+
+4. Tagged Templates (Plantillas Etiquetadas)
+
+Esta es la funcionalidad más avanzada y a menudo la menos comprendida de los Template Literals. Una "etiqueta" (tag) es simplemente una función que se antepone al template literal. El navegador llama a esta función con argumentos específicos que permiten procesar la plantilla antes de que se convierta en una cadena final.
+
+Esta característica es la base fundamental de librerías muy populares en el ecosistema React, como styled-components (para CSS-in-JS) o Apollo GraphQL (para consultas `gql`).
+¿Cómo funciona una función Tag?
+
+La función recibe:
+
+    Un array con las partes estáticas de la cadena (divididas por las interpolaciones).
+    Los valores evaluados de cada expresión interpolada (capturados mediante el operador Rest ...args).
+
+// Definición de la función "tag"
+function resaltar(strings, ...valores) {
+    // strings: Array de partes de texto ["El usuario ", " tiene ", " puntos."]
+    // valores: Array de los resultados de las variables [nombre, puntos]
+    
+    let resultado = "";
+    
+    strings.forEach((str, i) => {
+        const valor = valores[i] || "";
+        // Envolvemos el valor dinámico en un span HTML para resaltar
+        resultado += str + (valor ? `<span class="hl">${valor}</span>` : "");
+    });
+
+    return resultado;
+}
+
+const user = "Carlos";
+const score = 95;
+
+// Uso del Tagged Template: note que NO se usan paréntesis ()
+const salida = resaltar`El usuario ${user} tiene ${score} puntos.`;
+
+console.log(salida);
+// Output: "El usuario <span class="hl">Carlos</span> tiene <span class="hl">95</span> puntos."
+
+Importante para React: Cuando veas sintaxis como styled.div`color: red;` en React, estás viendo un Tagged Template en acción. La librería procesa ese string CSS, genera nombres de clase únicos y los inyecta en el DOM.
+5. Consideraciones de Seguridad
+
+Aunque los Template Literals facilitan la creación de cadenas HTML, no sanean automáticamente la entrada. Si utilizas datos introducidos por el usuario directamente dentro de un template literal que luego se renderiza como HTML (usando dangerouslySetInnerHTML en React o innerHTML en JS vainilla), te expones a ataques de tipo XSS (Cross-Site Scripting).
+
+En React estándar, esto es menos problemático porque JSX escapa automáticamente las variables antes de renderizarlas, pero es vital recordarlo cuando se manipulan strings directamente fuera del ciclo de renderizado de React.
+Resumen
+
+El dominio de los Template Literals es indispensable para el desarrollador moderno. Sus ventajas clave son:
+
+    Legibilidad: Código más limpio sin concatenaciones excesivas.
+    Versatilidad: Soporte nativo para múltiples líneas.
+    Poder: Ejecución de lógica JavaScript dentro de las interpolaciones ${}.
+    Extensibilidad: Capacidad de crear DSLs (Domain Specific Languages) mediante Tagged Templates.
+
+
